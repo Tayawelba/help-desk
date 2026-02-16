@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'sqlite'),
 
     /*
     |--------------------------------------------------------------------------
@@ -38,7 +38,17 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'database' => (function () {
+                $database = env('DB_DATABASE', database_path('database.sqlite'));
+
+                if ($database === ':memory:') {
+                    return $database;
+                }
+
+                return preg_match('/^[A-Za-z]:[\/\\\\]/', $database) || str_starts_with($database, DIRECTORY_SEPARATOR)
+                    ? $database
+                    : base_path($database);
+            })(),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],

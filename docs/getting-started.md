@@ -48,22 +48,37 @@ If you want to use another way to configure this Laravel project please refer to
 
 ### Database configuration
 
-Using the docker terminal for *laravel.test-1* container run the following command, to execute database migrations:
+SQLite is the default database configuration.
+
+1. Create the database file:
+
+```bash
+php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
+```
+
+2. Make sure your `.env` contains:
+
+```dotenv
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
+```
+
+3. Run migrations:
 
 ```bash
 php artisan migrate
 ```
 
-Using the docker terminal for *laravel.test-1* container run the following command, to execute database seeders:
+4. Seed initial data:
 
 ```bash
 php artisan db:seed
 ```
 
-**Optional:** if you want to import demo data, follow the below steps:
-1. Visit the docker image of **PHPMyAdmin** `http://127.0.0.1:8000`
+**Optional:** if you prefer MySQL demo data with Docker:
+1. Visit **PHPMyAdmin** `http://127.0.0.1:8000`
 2. Use the database `help_desk`
-3. Import the SQL script file located in `{APP_ROOT}/database/help_desk.sql`
+3. Import `{APP_ROOT}/database/help_desk.sql`
 
 > If you used the demo data, you can use the following user accounts to access the application:
 > 
